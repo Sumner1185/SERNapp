@@ -11,3 +11,19 @@ exports.carsAll = async (req, res) => {
           res.json({ message: `There was an error retrieving cars; ${err}` })
       })
 }
+
+exports.carCreate = async (req, res) => {
+    knex('cars')
+      .insert({
+          'make': req.body.make,
+          'model': req.body.model,
+          'colour': req.body.colour,
+          'year': req.body.year
+      })
+      .then(() => {
+          res.json({ message: `Car: \'${req.body.colour} ${req.body.make} ${req.body.model}\' created.`})
+      })
+      .catch(err => {
+          res.json({ message: `There was an error adding ${req.body.make} ${req.body.model}: ${err}`})
+      })
+}

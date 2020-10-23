@@ -3,7 +3,7 @@ const knex = require('./../db')
 exports.carsAll = async (req, res) => {
     knex
       .select('*')
-      .from('cars')
+      .from('garage')
       .then(carData => {
           res.json(carData)
       })
@@ -13,7 +13,7 @@ exports.carsAll = async (req, res) => {
 }
 
 exports.carCreate = async (req, res) => {
-    knex('cars')
+    knex('garage')
       .insert({
           'make': req.body.make,
           'model': req.body.model,
@@ -29,13 +29,26 @@ exports.carCreate = async (req, res) => {
 }
 
 exports.carDelete = async (req, res) => {
-    knex('cars')
+    knex('garage')
       .where('id', req.body.id)
       .del()
       .then(() => {
           res.json({ message: `Car ${req.body.id} deleted` })
       })
-      .catch((err) => {
+      .catch(err => {
           res.json({ message: `There was an error deleting car ${req.body.id}: ${err}` })
+      })
+}
+
+exports.carsReset = async (req, res) => {
+    knex
+      .select('*')
+      .from('garage')
+      .truncate()
+      .then(() => {
+          res.json({ message: 'Car list cleared' })
+      })
+      .catch(err => {
+        res.json({ message: `There was an error deleting car list: ${err}` })
       })
 }

@@ -1,6 +1,6 @@
 const path = require('path')
 
-const dbPath = path.resolve(__dirname, 'db/database.sqlite')
+const dbPath = path.resolve(__dirname, 'db/garage.sqlite')
 
 const knex = require('knex') ({
     client: 'sqlite3',
@@ -11,10 +11,10 @@ const knex = require('knex') ({
 })
 
 knex.schema
-    .hasTable('cars')
+    .hasTable('garage')
         .then((exists) => {
             if (!exists) {
-                return knex.schema.createTable('cars', (table) => {
+                return knex.schema.createTable('garage', (table) => {
                     table.increments('id').primary()
                     table.string('make')
                     table.string('model')
@@ -22,7 +22,7 @@ knex.schema
                     table.string('year')
                 })
                 .then(() => {
-                    console.log('Table \'cars\' created')
+                    console.log('Table \'garage\' created')
                 })
                 .catch((err) => {
                     console.error(`There was an error creating table: ${err}`)
@@ -36,7 +36,7 @@ knex.schema
             console.error(`There was an error creating database: ${err}`)
         })
 
-knex.select('*').from('cars')
+knex.select('*').from('garage')
     .then(data => console.log('data:', data))
     .catch(err => console.log(err))
 
